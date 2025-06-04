@@ -62,6 +62,7 @@ subroutine do_analysis(dumpfile,num,xyzh,vxyzu,particlemass,npart,time,iunit)
  real,             intent(in)    :: particlemass,time
  logical                         :: requires_eos_opts
 
+ print*,'before listing analysis type'
  !chose analysis type
  if (dump_number==0) then
     print "(36(a,/))", &
@@ -104,6 +105,7 @@ subroutine do_analysis(dumpfile,num,xyzh,vxyzu,particlemass,npart,time,iunit)
     analysis_to_perform = 1
     call prompt('Choose analysis type ',analysis_to_perform,1,36)
  endif
+ print*,'after listing analysis type'
  print*,' ANALYSIS TO PERFORM = ',analysis_to_perform
  call adjust_corotating_velocities(npart,particlemass,xyzh,vxyzu,&
                                    xyzmh_ptmass,vxyz_ptmass,omega_corotate,dump_number)
@@ -302,7 +304,10 @@ subroutine separation_vs_time(time)
  real, allocatable              :: sink_separation(:,:)
  integer                        :: i,ncols
  ncols = 4*(nptmass-1)
+
+ print*,'in separation_vs_time'
  allocate(columns(ncols),sink_separation(4,max(1,nptmass-1)))
+ print*,'allocated arrays'
 
  do i=1,(nptmass-1)
     call separation_vector(xyzmh_ptmass(1:3,1),xyzmh_ptmass(1:3,i+1),sink_separation(1:4,i))
@@ -313,8 +318,11 @@ subroutine separation_vs_time(time)
     write(columns((i*4)),   '(A11,I1)') '      sep. ', i
  enddo
 
+ print*,'finished calculations'
  call write_time_file('separation_vs_time', columns, time, sink_separation, ncols, dump_number)
+ print*,'data file written'
  deallocate(columns,sink_separation)
+ print*,'deallocated arrays'
 end subroutine separation_vs_time
 
 
