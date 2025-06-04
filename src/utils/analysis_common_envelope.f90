@@ -104,7 +104,7 @@ subroutine do_analysis(dumpfile,num,xyzh,vxyzu,particlemass,npart,time,iunit)
     analysis_to_perform = 1
     call prompt('Choose analysis type ',analysis_to_perform,1,36)
  endif
-
+ print*,' ANALYSIS TO PERFORM = ',analysis_to_perform
  call adjust_corotating_velocities(npart,particlemass,xyzh,vxyzu,&
                                    xyzmh_ptmass,vxyz_ptmass,omega_corotate,dump_number)
 
@@ -114,6 +114,7 @@ subroutine do_analysis(dumpfile,num,xyzh,vxyzu,particlemass,npart,time,iunit)
 
  select case(analysis_to_perform)
  case(1) !sink separation
+    print*,' calling separation vs time'
     call separation_vs_time(time)
  case(2) !bound and unbound quantities
     call bound_mass(time,npart,particlemass,xyzh,vxyzu)
