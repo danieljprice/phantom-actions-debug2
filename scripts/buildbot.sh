@@ -58,7 +58,7 @@ echo "url = $url";
 pwd=$PWD;
 phantomdir="$pwd/../";
 listofcomponents='main setup analysis utils';
-#listofcomponents='setup'
+listofcomponents='analysis'
 #
 # get list of targets, components and setups to check
 #
