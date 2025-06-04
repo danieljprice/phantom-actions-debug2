@@ -20,7 +20,7 @@ env:
   WEB_SERVER: data.phantom.cloud.edu.au
   WEB_HTML_DIR: /var/www/html
   BUILD_LOG_DIR: /ci/build/logs
-  NPARALLEL: 32
+  NPARALLEL: 1
 
 jobs:
   matrix_prep:
@@ -123,7 +123,7 @@ jobs:
       run: mkdir logs
 
     - name: "Run buildbot.sh"
-      run: ./buildbot.sh --maxdim 17000000 --url http://${WEB_SERVER}/${BUILD_LOG_DIR} --parallel ${{ matrix.batch }} ${{ env.NPARALLEL }}
+      run: ./buildbot.sh --url http://${WEB_SERVER}/${BUILD_LOG_DIR} --parallel ${{ matrix.batch }} ${{ env.NPARALLEL }}
       working-directory: scripts
       env:
         SYSTEM: ${{ matrix.system }}
