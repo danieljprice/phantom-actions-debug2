@@ -19,12 +19,12 @@ if [ ! -f $file ]; then
 fi
 
 # perform phantomanalysis tests
-./phantomanalysis $file > /dev/null << SEP
+./phantomanalysis $file << SEP
 1
 no
 SEP
 
-./phantomanalysis $file > /dev/null << BOUND
+./phantomanalysis $file << BOUND
 2
 no
 2
@@ -34,7 +34,7 @@ no
 0.0142
 BOUND
 
-./phantomanalysis $file > /dev/null << ENERGIES
+./phantomanalysis $file << ENERGIES
 3
 no
 2
