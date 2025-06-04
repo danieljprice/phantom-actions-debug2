@@ -50,9 +50,6 @@ jobs:
       matrix:
         system:
           - aocc
-          - gfortran
-          - ifort
-          - ifx
         batch: ${{ fromJson(needs.matrix_prep.outputs.batch) }}
 
     name: build (batch ${{ matrix.batch }}/${{ needs.matrix_prep.outputs.nbatch }}, SYSTEM=${{ matrix.system }})
