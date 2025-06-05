@@ -313,6 +313,7 @@ check_phantomanalysis ()
 
 
 CRAP
+      ./phantomanalysis
       python $pwd/test_analysis_ce.py; err=$?;
    else
       #echo "there are no analysis unit tests for SETUP=$setup"
