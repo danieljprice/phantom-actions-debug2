@@ -20,18 +20,12 @@ if [ "X$SYSTEM" == "X" ]; then
 fi
 
 # Default arguments
-maxdim=11000000;
 url='';
 batch=1;
 nbatch=1;
 
 while [[ "$1" == --* ]]; do
   case $1 in
-    --maxdim)
-      shift;
-      maxdim=$1; # max idim to check
-      ;;
-
     --url)
       shift;
       url=$1; # url for results
@@ -59,25 +53,17 @@ if [[ "$badflag" != "" ]]; then
    exit
 fi
 
-
-if (($maxdim > 0)) && (($maxdim < 2000000000)); then
-   echo "Using maxdim = $maxdim";
-else
-   echo "Usage: $0 [max idim to check] [url]";
-   exit;
-fi
-
 echo "url = $url";
 
 pwd=$PWD;
 phantomdir="$pwd/../";
 listofcomponents='main setup analysis utils';
-#listofcomponents='setup'
+listofcomponents='analysis'
 #
 # get list of targets, components and setups to check
 #
 allsetups=`grep 'ifeq ($(SETUP)' $phantomdir/build/Makefile_setups | grep -v skip | cut -d, -f 2 | cut -d')' -f 1`
-#allsetups='star'
+allsetups='star'
 setuparr=($allsetups)
 batchsize=$(( ${#setuparr[@]} / $nbatch + 1 ))
 offset=$(( ($batch-1) * $batchsize ))
@@ -321,6 +307,13 @@ check_phantomanalysis ()
    if [ "X$setup" == "Xstar" ]; then
       echo "performing analysis unit tests for SETUP=$setup"
       $pwd/test_analysis_ce.sh; err=$?;
+      ./phantomanalysis binary_01000 << CRAP
+
+
+
+
+CRAP
+      ./phantomanalysis
       python $pwd/test_analysis_ce.py; err=$?;
    else
       #echo "there are no analysis unit tests for SETUP=$setup"
@@ -382,17 +375,6 @@ for setup in $listofsetups; do
       echo "<table>" >> $htmlfile;
    fi
    cd $phantomdir;
-   dims="`make --quiet SETUP=$setup getdims`";
-   dims=${dims//[^0-9]/};  # number only
-   if [ "X$dims" == "X" ]; then
-      dims=$maxdim;
-   fi
-   if (($dims <= $maxdim)); then
-      maxp='';
-   else
-      maxp="MAXP=$maxdim";
-      echo "compiling $setup with $maxp";
-   fi
    echo "<tr>" >> $htmlfile;
    for target in $listoftargets; do
       ntotal=$((ntotal + 1));
@@ -421,7 +403,7 @@ for setup in $listofsetups; do
       else
          mynowarn=$nowarn;
       fi
-      make SETUP=$setup $nolibs $mynowarn $maxp $target $mydebug 1> $makeout 2> $errorlog; err=$?;
+      make SETUP=$setup $nolibs $mynowarn $target $mydebug 1> $makeout 2> $errorlog; err=$?;
       #--remove line numbers from error log files
       sed -e 's/90(.*)/90/g' -e 's/90:.*:/90/g' $errorlog | grep -v '/tmp' > $errorlog.tmp && mv $errorlog.tmp $errorlog;
       if [ $err -eq 0 ]; then
@@ -489,7 +471,7 @@ for setup in $listofsetups; do
       if [ "X$target" == "Xsetup" ] && [ "X$component" == "Xsetup" ]; then
          # also build phantom main binary
          echo "compiling phantom with SETUP=$setup"
-         make SETUP=$setup $nolibs $mynowarn $maxp $mydebug 1>> $makeout 2>> $errorlog; err=$?;
+         make SETUP=$setup $nolibs $mynowarn $mydebug 1>> $makeout 2>> $errorlog; err=$?;
          check_phantomsetup $setup;
       elif [ "X$target" == "Xanalysis" ] && [ "X$component" == "Xanalysis" ]; then
          check_phantomanalysis $setup;
