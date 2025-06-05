@@ -307,6 +307,12 @@ check_phantomanalysis ()
    if [ "X$setup" == "Xstar" ]; then
       echo "performing analysis unit tests for SETUP=$setup"
       $pwd/test_analysis_ce.sh; err=$?;
+      ./phantomanalysis binary_01000 << CRAP
+
+
+
+
+CRAP
       python $pwd/test_analysis_ce.py; err=$?;
    else
       #echo "there are no analysis unit tests for SETUP=$setup"
