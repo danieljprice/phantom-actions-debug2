@@ -34,6 +34,7 @@ program phantomanalysis
  character(len=120) :: dumpfile,fileprefix,infile
  type(inopts), dimension(:), allocatable :: db
 
+ print*,' STARTING ANALYSIS'
  call set_io_unit_numbers
  iprint = 6
 !
@@ -85,6 +86,7 @@ program phantomanalysis
 !
 !--read particle setup from dumpfile
 !
+    print*,' READING DUMP'
     if (index(analysistype,'header') /= 0) then
        !--only read the dumpfile header
        call read_dump(trim(dumpfile),time,hfact,idisk1,iprint,0,1,ierr,headeronly=.true.)
@@ -119,7 +121,7 @@ program phantomanalysis
        print "(a,f6.2,a)",' WARNING! hfact = ',hfact,' from dump file, resetting to default'
        hfact = hfact_default
     endif
-
+    print*,'CALLING DO ANALYSIS'
     call do_analysis(trim(dumpfile),numfromfile(dumpfile),xyzh,vxyzu, &
                      massoftype(1),npart,time,ievfile)
  enddo over_args
