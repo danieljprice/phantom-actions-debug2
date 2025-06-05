@@ -24,6 +24,8 @@ fi
 no
 SEP
 
+echo -e "1\n\n" | ./phantomanalysis $file
+
 ./phantomanalysis $file << BOUND
 2
 no
